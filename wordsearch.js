@@ -1,120 +1,115 @@
 const wordSearch = (letters, word) => {
-    const horizontalJoin = letters.map(ls => ls.join(''))
+  const horizontalJoin = letters.map(ls => ls.join(''));
 
-    if (letters.length === 0) {
-        return "not searchable"
+  if (letters.length === 0) {
+    return "not searchable";
+  }
+  for (let l of horizontalJoin) {
+    if (l.includes(word)) {
+      return true;
     }
-    for (l of horizontalJoin) {
-        if (l.includes(word)) {
-            return true;
-        }
+  }
+
+  const reverseHorizontal = [];
+  for (let h of horizontalJoin) {
+    reverseHorizontal.push(h.split("").reverse().join(""));
+  }
+
+  for (let rh of reverseHorizontal) {
+    if (rh.includes(word)) {
+      return true;
     }
+  }
 
-    const reverseHorizontal = [];
-    for (h of horizontalJoin) {
-        reverseHorizontal.push(h.split("").reverse().join(""));
+  const transpose = (matrix) => {
+
+    let grid = [];
+    let rowLength = matrix.length;
+    let columnLength = matrix[0].length;
+    for (let x = 0; x < columnLength; x++) {
+      grid[x] = [];
     }
-
-    for (rh of reverseHorizontal) {
-        if (rh.includes(word)) {
-            return true;
-        }
+    for (let y = 0; y < rowLength; y++) {
+      for (let x = 0; x < columnLength; x++) {
+        grid[x][y] = matrix[y][x];
+      }
     }
+    return grid;
+  };
 
-    const transpose = (matrix) => {
+  let verticalArrayCheck = transpose(letters);
 
-        let grid = [];
-        let rowLength = matrix.length
-        let columnLength = matrix[0].length
-        for (let x = 0; x < columnLength; x++) {
-            grid[x] = []
-        }
-        for (let y = 0; y < rowLength; y++) {
-            for (let x = 0; x < columnLength; x++) {
-                grid[x][y] = matrix[y][x]
-            }
-        }
-        return grid;
+  const verticalCheck = verticalArrayCheck.map(vc => vc.join(''));
+
+  for (let v of verticalCheck) {
+    if (v.includes(word)) {
+      return true;
     }
+  }
 
-    let verticalArrayCheck = transpose(letters)
+  const reverseVertical = [];
 
-    const verticalCheck = verticalArrayCheck.map(vc => vc.join(''))
+  for (let vw of verticalCheck) {
+    reverseVertical.push(vw.split("").reverse().join(""));
+  }
 
-    for (v of verticalCheck) {
-        if (v.includes(word)) {
-            return true;
-        }
+  for (let rv of reverseVertical) {
+    if (rv.includes(word)) {
+      return true;
     }
+  }
 
-    const reverseVertical = [];
+  const diagonalArray = [];
 
-    for (vw of verticalCheck) {
-        reverseVertical.push(vw.split("").reverse().join(""));
-    }
+  let count = 0;
 
-    for (rv of reverseVertical) {
-        if (rv.includes(word)) {
-            return true;
-        }
-    }
+  let horizontalLength = letters.length;
+  let verticalLength = letters[0].length;
 
-    const diagonalArray = []
-
-    let count = 0;
-
-    let horizontalLength = letters.length
-    let verticalLength = letters[0].length
-
-    let diagonalCases = horizontalLength + verticalLength - 1
-
-    let diagonalWord = "";
-    for (let i = 0; i < horizontalLength; i++) {
-        for (let j = 0; j < letters.length; j++) {
-            for (let k = 0; k < letters[j].length; k++) {
-                if (j === k + count) {
-                    diagonalWord += letters[j][k]
+  let diagonalWord = "";
+  for (let i = 0; i < horizontalLength; i++) {
+    for (let j = 0; j < letters.length; j++) {
+      for (let k = 0; k < letters[j].length; k++) {
+        if (j === k + count) {
+          diagonalWord += letters[j][k];
     
-                    // console.log(diagonalWord);
-                }
-            }
-    
+          // console.log(diagonalWord);
         }
-        diagonalArray.push(diagonalWord);
-        diagonalWord = "";
-        // console.log(diagonalArray)
-        count++;
+      }
+    
     }
+    diagonalArray.push(diagonalWord);
+    diagonalWord = "";
+    count++;
+  }
 
-    count = 1;
+  count = 1;
     
-    let diagonalWordTwo = "";
-    for (let i = 0; i < verticalLength - 1; i++) {
-        for (let j = 0; j < letters.length; j++) {
-            for (let k = 1; k < letters[j].length; k++) {
-                if (j + count === k) {
-                    diagonalWordTwo += letters[j][k]
-    
-                    // console.log(diagonalWord);
-                }
-            }
-    
+  let diagonalWordTwo = "";
+  for (let i = 0; i < verticalLength - 1; i++) {
+    for (let j = 0; j < letters.length; j++) {
+      for (let k = 1; k < letters[j].length; k++) {
+        if (j + count === k) {
+          diagonalWordTwo += letters[j][k];
         }
-        diagonalArray.push(diagonalWordTwo);
-        diagonalWordTwo = "";
-        count++;
+      }
+    
     }
+    diagonalArray.push(diagonalWordTwo);
+    diagonalWordTwo = "";
+    count++;
+  }
 
-    for (let d of diagonalArray) {
-        if (d.includes(word)) {
-            return true
-        }
+  for (let d of diagonalArray) {
+    if (d.includes(word)) {
+      return true;
     }
-    return false;
-}
+  }
+  return false;
+};
 
 
-module.exports = wordSearch
+module.exports = wordSearch;
 
 // ================================
 
